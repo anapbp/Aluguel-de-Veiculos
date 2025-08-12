@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+
+
+message GetAvailableVehiclesRequest {
+  string classe_veiculo_desejada = 1; 
+}
+
+message VehicleInfo {
+  string nome_veiculo = 1;
+}
+
+message ClassAvailability {
+  string nome_classe = 1;
+  repeated VehicleInfo veiculos = 2; 
+  int32 quantidade_disponivel = 3;
+}
+
+message GetAvailableVehiclesResponse {
+  string terminal_id_str = 1;
+  repeated ClassAvailability disponibilidade_por_classe = 2;
+  string error_message = 3; 
+}
+
+service Terminal {
+  rpc RentACar (RentCarRequest) returns (RentCarResponse) {}
+  rpc ReturnACar (ReturnCarRequest) returns (ReturnCarResponse) {}
+  rpc CheckPending (CheckPendingStatusRequest) returns (CheckPendingStatusResponse) {}
+  rpc GetAvailableVehicles (GetAvailableVehiclesRequest) returns (GetAvailableVehiclesResponse) {} 
+}
+
+message RentCarRequest {
+  string ID_cliente = 1;
+  string IP_cliente = 2;
+  string Porta_cliente = 3;
+  string Classe_veiculo = 4;
+}
+
+message RentCarResponse {
+  string message = 1; 
+  string status = 2; 
+  string request_id = 3;
+  string terminal_responsavel_id_str = 4; 
+
+}
+
+message ReturnCarRequest {
+  string ID_cliente = 1;
+  string Nome_veiculo = 2;
+  string Classe_veiculo = 3;
+}
+
+message ReturnCarResponse {
+  bool success = 1;         
+  string error_message = 2; 
+}
+
+message CheckPendingStatusRequest {
+  string request_id = 1; 
+  string ID_cliente = 2;
+}
+
+message CheckPendingStatusResponse {
+  enum PendingQueryStatus {
+    REQUEST_UNKNOWN = 0;     
+    STILL_PENDING_HERE = 1;  
+    FULFILLED_BY_THIS_TERMINAL = 2; 
+    FORWARDED_AND_PENDING_ELSEWHERE = 3; 
+    FORWARDED_AND_FULFILLED_ELSEWHERE = 4; 
+    ERROR_CHECKING_STATUS = 5; 
+  }
+  PendingQueryStatus query_status = 1;
+  string veiculo_alocado = 2;
+  string classe_veiculo = 3;  
+  string terminal_atual_responsavel_id_str = 4; 
+  string original_request_status_no_destino = 5; 
+  string original_request_message_no_destino = 6; 
+}
+
+service CallbackService {
+  rpc ReceiveCallback (CallbackMessage) returns (CallbackResponse);
+}
+
+message CallbackMessage {
+  string message_content = 1;
+}
+
+message CallbackResponse {
+  string status = 1;
+}

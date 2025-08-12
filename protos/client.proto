@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+
+
+message RentCarConfirmRequest {
+  string message = 1; 
+}
+
+message RentCarConfirmResponse {
+  bool message = 1;  
+}
+
+service Client_Waiting {
+  rpc RentACarConfirmation (RentCarConfirmRequest) returns (RentCarConfirmResponse) {}
+}

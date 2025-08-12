@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+
+
+message HeartbeatRequest {
+  string service_id = 1;
+  string timestamp = 2;
+}
+
+message HeartbeatResponse {
+  string status = 1; 
+}
+
+service HeartbeatService {
+  rpc EnviarHeartbeat(HeartbeatRequest) returns (HeartbeatResponse);
+}

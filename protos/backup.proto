@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+
+
+message BackupRequest {
+  string terminal_id = 1;      
+  string cliente_id = 2;
+  string classe_veiculo = 3;
+  string nome_veiculo = 4;       
+  string status = 5;             
+  string timestamp = 6;  
+  string request_id_pendencia = 7; 
+  string ip_cliente_pendente = 8;
+  string porta_cliente_pendente = 9;
+}
+
+message BackupResponse {
+  string status = 1; 
+}
+
+message QueryPendingRequests {
+  string terminal_id_responsavel = 1; 
+  string classe_veiculo_desejada = 2; 
+  bool apenas_ativas = 3; 
+}
+
+message PendingRequestInfo {
+  string request_id = 1;
+  string cliente_id = 2;
+  string classe_veiculo = 3;
+  string ip_cliente = 4;
+  string porta_cliente = 5;
+  string terminal_id_original_responsavel = 6;
+  string timestamp_entrada_pendencia = 7;
+}
+
+message QueryPendingResponse {
+  repeated PendingRequestInfo pendencias = 1;
+  string error_message = 2;
+}
+
+service BackupService {
+  rpc RegistrarTransacao (BackupRequest) returns (BackupResponse);
+  rpc ConsultarPendencias (QueryPendingRequests) returns (QueryPendingResponse);
+}

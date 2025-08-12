@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+
+
+message InfoRequest {
+  string name = 1;
+}
+
+message InfoReply {
+  string message = 1; 
+}
+
+message Empty {}
+
+service Information {
+  rpc TerminalOnLine (Empty) returns (InfoReply) {}
+}
